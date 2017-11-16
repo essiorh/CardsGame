@@ -15,7 +15,7 @@ class CardsScreen : Screen {
     override fun render(delta: Float) {
         Gdx.app.log("fps", (1 / delta).toString())
         world.update(delta)
-        render.render()
+        render.render(delta)
     }
 
     override fun pause() {}

@@ -82,16 +82,18 @@ class SimpleGame : ApplicationAdapter() {
         // tell the camera to update its matrices.
         camera.update()
 
-        // tell the SpriteBatch to render in the
-        // coordinate system specified by the camera.
-        batch.projectionMatrix = camera.combined
+        batch.apply {
+            // tell the SpriteBatch to render in the
+            // coordinate system specified by the camera.
+            projectionMatrix = camera.combined
 
-        // begin a new batch and draw the bucket and
-        // all drops
-        batch.begin()
-        batch.draw(bucketImage, bucket.x, bucket.y)
-        raindrops.forEach { batch.draw(dropImage, it.x, it.y) }
-        batch.end()
+            // begin a new batch and draw the bucket and
+            // all drops
+            begin()
+            draw(bucketImage, bucket.x, bucket.y)
+            raindrops.forEach { draw(dropImage, it.x, it.y) }
+            end()
+        }
 
         // process user input
         if (Gdx.input.isTouched) {
@@ -108,7 +110,7 @@ class SimpleGame : ApplicationAdapter() {
         if (bucket.x > 800 - 64) bucket.x = (800 - 64).toFloat()
 
         // check if we need to create a new raindrop
-        if (TimeUtils.nanoTime() - lastDropTime > 500000000) spawnRaindrop()
+        if (TimeUtils.nanoTime() - lastDropTime > 1000000000) spawnRaindrop()
 
         // move the raindrops, remove any that are beneath the bottom edge of
         // the screen or that hit the bucket. In the later case we play back
@@ -117,7 +119,7 @@ class SimpleGame : ApplicationAdapter() {
         val iter = raindrops.iterator()
         while (iter.hasNext()) {
             val raindrop = iter.next()
-            raindrop.y -= 300 * Gdx.graphics.deltaTime
+            raindrop.y -= 200 * Gdx.graphics.deltaTime
             if (raindrop.y + 64 < 0) iter.remove()
             if (raindrop.overlaps(bucket)) {
                 dropSound.play()
